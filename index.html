@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: #1c1c1c;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid #e8e8e8;
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: #1c1c1c;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: #1c1c1c; }
+
+    /* ── Hero mosaic ── */
+    .hero {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 320px 220px;
+      gap: 3px;
+      padding: 3px;
+      background: #e8e8e8;
+    }
+
+    .hero-cell {
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .hero-cell:first-child { grid-row: span 2; }
+
+    .hero-cell img,
+    .hero-cell .ph {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .hero-cell:hover img,
+    .hero-cell:hover .ph { transform: scale(1.04); }
+
+    .hero-cell::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 2.5px solid #4a80c4;
+      opacity: 0;
+      transition: opacity 0.25s;
+      pointer-events: none;
+    }
+
+    .hero-cell:hover::after { opacity: 1; }
+
+    /* Placeholder colours — replace .ph divs with <img> tags */
+    .ph { display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+    .c1 { background: #c5b8a8; }
+    .c2 { background: #9e9488; }
+    .c3 { background: #b8ada0; }
+    .c4 { background: #888078; }
+    .c5 { background: #a09488; }
+
+    .hero-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.5rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .hero-overlay h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .hero-overlay p {
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-top: 0.4rem;
+    }
+
+    /* ── Section label ── */
+    .section-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.75rem 2.5rem 1rem;
+    }
+
+    .section-label h2 {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #888;
+    }
+
+    .section-label a {
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #4a80c4;
+      text-decoration: none;
+    }
+
+    /* ── Masonry gallery ── */
+    .gallery {
+      padding: 0 2.5rem 2rem;
+      columns: 3;
+      column-gap: 6px;
+    }
+
+    .g-item {
+      break-inside: avoid;
+      margin-bottom: 6px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.25s;
+    }
+
+    .g-item:hover { border-color: #4a80c4; }
+
+    .g-thumb {
+      width: 100%;
+      display: block;
+      transition: transform 0.5s ease;
+      object-fit: cover;
+    }
+
+    .g-item:hover .g-thumb { transform: scale(1.04); }
+
+    /* Heights — adjust per your images or remove for natural aspect ratio */
+    .g-tall  { height: 280px; }
+    .g-med   { height: 200px; }
+    .g-short { height: 155px; }
+    .g-wide  { height: 240px; }
+
+    /* Placeholder fills — delete when using real images */
+    .g-p1  { background: #c2b5a5; }
+    .g-p2  { background: #94887a; }
+    .g-p3  { background: #b8cce0; }
+    .g-p4  { background: #7a8898; }
+    .g-p5  { background: #d0c8bc; }
+    .g-p6  { background: #a8b8c8; }
+    .g-p7  { background: #8c9aaa; }
+    .g-p8  { background: #b0a898; }
+    .g-p9  { background: #c8d4e0; }
+    .g-p10 { background: #908480; }
+    .g-p11 { background: #bcc4cc; }
+    .g-p12 { background: #a4aea8; }
+
+    .g-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0.75rem 0.875rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .g-item:hover .g-caption { opacity: 1; }
+
+    .g-caption span {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .g-img-label {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ── Series strip ── */
+    .series-strip {
+      padding: 0 2.5rem 2rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .series-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.25s;
+    }
+
+    .series-item:hover { border-color: #4a80c4; }
+
+    .series-thumb {
+      height: 180px;
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .series-item:hover .series-thumb { transform: scale(1.04); }
+
+    .s1 { background: #b4c8dc; }
+    .s2 { background: #8ca0b4; }
+    .s3 { background: #c8bdb0; }
+    .s4 { background: #9090a0; }
+
+    .series-info {
+      padding: 0.75rem;
+      background: #fff;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .series-name {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #1c1c1c;
+    }
+
+    .series-count {
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: #aaa;
+      margin-top: 0.2rem;
+    }
+
+    /* ── About + Contact ── */
+    .bottom-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid #e8e8e8;
+      margin-top: 1rem;
+    }
+
+    .about-col {
+      padding: 2.5rem;
+      border-right: 1px solid #e8e8e8;
+    }
+
+    .about-col h3 {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #4a80c4;
+      margin-bottom: 0.75rem;
+    }
+
+    .about-col p {
+      font-size: 0.8rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: #555;
+    }
+
+    .contact-col {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .contact-col h3 {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #4a80c4;
+    }
+
+    .contact-col a {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #1c1c1c;
+      text-decoration: none;
+      border-bottom: 1px solid #4a80c4;
+      width: fit-content;
+      padding-bottom: 2px;
+    }
+
+    footer {
+      padding: 1rem 2.5rem;
+      border-top: 1px solid #e8e8e8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: #bbb;
+      letter-spacing: 0.05em;
+    }
+
+    .social-links { display: flex; gap: 1.5rem; }
+
+    .social-links a {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #aaa;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .social-links a:hover { color: #4a80c4; }
+
+    @media (max-width: 650px) {
+      .hero { grid-template-columns: 1fr 1fr; grid-template-rows: 260px 180px 180px; }
+      .hero-cell:first-child { grid-row: span 1; grid-column: span 2; }
+      .gallery { columns: 2; }
+      .series-strip { grid-template-columns: 1fr 1fr; }
+      .bottom-strip { grid-template-columns: 1fr; }
+      .about-col { border-right: none; border-bottom: 1px solid #e8e8e8; }
+      nav, .section-label, .gallery, .series-strip, .about-col, .contact-col, footer { padding-left: 1.25rem; padding-right: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#">Work</a></li>
+    <li><a href="#">Series</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── Hero mosaic ──
+     To replace placeholders with real photos, swap each:
+       <div class="ph c1">Your photo here</div>
+     with:
+       <img src="your-photo.jpg" alt="Description" />
+     Make sure the image file is in the same folder as this HTML file.
+-->
+<div class="hero">
+  <div class="hero-cell">
+    <div class="ph c1">Your photo here</div>
+    <div class="hero-overlay">
+      <h1>Photography<br>Portfolio</h1>
+      <p>Pacific Northwest · Available for commission</p>
+    </div>
+  </div>
+  <div class="hero-cell"><div class="ph c2">Your photo</div></div>
+  <div class="hero-cell"><div class="ph c3">Your photo</div></div>
+  <div class="hero-cell"><div class="ph c4">Your photo</div></div>
+  <div class="hero-cell"><div class="ph c5">Your photo</div></div>
+</div>
+
+<!-- ── Gallery ──
+     Same swap applies here. You can also remove the height class
+     (e.g. g-tall, g-med) and let the image's natural aspect ratio dictate height.
+     Example: <img class="g-thumb" src="photo1.jpg" alt="Portrait" />
+-->
+<div class="section-label">
+  <h2>Selected work</h2>
+  <a href="#">View all →</a>
+</div>
+
+<div class="gallery">
+  <div class="g-item">
+    <div class="g-thumb g-tall g-p1"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Portrait</span></div>
+  </div>
+  <div class="g-item">
+    <div class="g-thumb g-med g-p2"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Landscape</span></div>
+  </div>
+  <div class="g-item">
+    <div class="g-thumb g-short g-p3"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Urban</span></div>
+  </div>
+  <div class="g-item">
+    <div class="g-thumb g-wide g-p4"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Documentary</span></div>
+  </div>
+  <div class="g-item">
+    <div class="g-thumb g-short g-p5"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Still life</span></div>
+  </div>
+  <div class="g-item">
+    <div class="g-thumb g-med g-p6"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Portrait</span></div>
+  </div>
+  <div class="g-item">
+    <div class="g-thumb g-tall g-p7"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Landscape</span></div>
+  </div>
+  <div class="g-item">
+    <div class="g-thumb g-med g-p8"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Urban</span></div>
+  </div>
+  <div class="g-item">
+    <div class="g-thumb g-short g-p9"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Nature</span></div>
+  </div>
+  <div class="g-item">
+    <div class="g-thumb g-short g-p10"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Street</span></div>
+  </div>
+  <div class="g-item">
+    <div class="g-thumb g-wide g-p11"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Architecture</span></div>
+  </div>
+  <div class="g-item">
+    <div class="g-thumb g-med g-p12"><div class="g-img-label">Your photo</div></div>
+    <div class="g-caption"><span>Editorial</span></div>
+  </div>
+</div>
+
+<!-- ── Series ── -->
+<div class="section-label">
+  <h2>Series</h2>
+  <a href="#">Browse →</a>
+</div>
+
+<div class="series-strip">
+  <div class="series-item">
+    <div class="series-thumb s1"><div class="g-img-label">Your photo</div></div>
+    <div class="series-info">
+      <p class="series-name">Still Waters</p>
+      <p class="series-count">18 images</p>
+    </div>
+  </div>
+  <div class="series-item">
+    <div class="series-thumb s2"><div class="g-img-label">Your photo</div></div>
+    <div class="series-info">
+      <p class="series-name">City Light</p>
+      <p class="series-count">24 images</p>
+    </div>
+  </div>
+  <div class="series-item">
+    <div class="series-thumb s3"><div class="g-img-label">Your photo</div></div>
+    <div class="series-info">
+      <p class="series-name">Portraits, 2024</p>
+      <p class="series-count">31 images</p>
+    </div>
+  </div>
+  <div class="series-item">
+    <div class="series-thumb s4"><div class="g-img-label">Your photo</div></div>
+    <div class="series-info">
+      <p class="series-name">The Long Road</p>
+      <p class="series-count">12 images</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── About + Contact ── -->
+<div class="bottom-strip">
+  <div class="about-col">
+    <h3>About</h3>
+    <p>Based in the Pacific Northwest, available for portrait, editorial, and documentary commissions. My work focuses on natural light and honest moments.</p>
+  </div>
+  <div class="contact-col">
+    <h3>Get in touch</h3>
+    <a href="mailto:hello@portfolio.com">hello@portfolio.com</a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 Portfolio</p>
+  <div class="social-links">
+    <a href="#">Instagram</a>
+    <a href="#">VSCO</a>
+    <a href="#">Behance</a>
+  </div>
+</footer>
+
+</body>
+</html>
